@@ -239,3 +239,5 @@ build:tensorflow_testing_rbe_linux --config=tensorflow_testing_rbe
 
 # Load `.jax_configure.bazelrc` file written by build.py
 try-import %workspace%/.jax_configure.bazelrc
+try-import %workspace%/user.bazelrc
+

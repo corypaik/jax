@@ -24,3 +24,6 @@ bin/
 include/
 lib/
 share/
+jax.iml
+user.bazelrc
+

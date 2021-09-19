@@ -25,5 +25,5 @@ def repo():
             "https://github.com/mreineck/pocketfft/archive/f800d91ba695b6e19ae2687dd60366900b928002.tar.gz",
             "https://storage.googleapis.com/jax-releases/mirror/pocketfft/pocketfft-f800d91ba695b6e19ae2687dd60366900b928002.tar.gz",
         ],
-        build_file = "@//third_party/pocketfft:BUILD.bazel",
+        build_file = Label("//third_party/pocketfft:BUILD.bazel"),
     )

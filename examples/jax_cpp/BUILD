@@ -19,9 +19,14 @@ load(
 
 licenses(["notice"])
 
+# TODO(corypaik): Remove manual tag once the visibility of pjrt:cpu_device,
+# pjrt:pjrt_client, and tools:hlo_module_loader mis public. Otherwise this
+# is not directly runnable.
+
 tf_cc_binary(
     name = "main",
     srcs = ["main.cc"],
+    tags = ["manual"],
     deps = [
         "@org_tensorflow//tensorflow/compiler/xla:literal",
         "@org_tensorflow//tensorflow/compiler/xla:literal_util",

@@ -24,7 +24,7 @@ py_library(
         "ignore_for_dep=third_party.py.tensorflow",
     ],
     deps = [
-        "//third_party/py/jax",
+        "//jax",
     ],
 )
 
@@ -32,8 +32,7 @@ py_library(
     name = "jax_to_ir_with_tensorflow",
     srcs = ["jax_to_ir.py"],
     deps = [
-        "//third_party/py/jax",
-        "//third_party/py/jax/experimental/jax2tf",
-        "//third_party/py/tensorflow",
+        "//jax",
+        "@org_tensorflow//tensorflow:tensorflow_py",
     ],
 )
