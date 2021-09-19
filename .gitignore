@@ -18,3 +18,5 @@ docs/_autosummary
 .vscode
 venv/
 jax.iml
+user.bazelrc
+

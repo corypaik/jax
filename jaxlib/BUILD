@@ -81,8 +81,6 @@ cc_library(
     ],
     features = ["-use_header_modules"],
     deps = [
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cusolver_lib",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cusparse_lib",
         "@com_google_absl//absl/memory",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
@@ -90,6 +88,8 @@ cc_library(
         "@com_google_absl//absl/strings:str_format",
         "@local_config_cuda//cuda:cublas_headers",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cusolver_lib",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cusparse_lib",
     ],
 )
 
@@ -251,9 +251,6 @@ cc_library(
         ":cuda_gpu_kernel_helpers",
         ":handle_pool",
         ":kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cublas_lib",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/base",
         "@com_google_absl//absl/base:core_headers",
@@ -263,6 +260,9 @@ cc_library(
         "@com_google_absl//absl/synchronization",
         "@local_config_cuda//cuda:cublas_headers",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cublas_lib",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
     ],
 )
 
@@ -278,10 +278,10 @@ pybind_extension(
     deps = [
         ":cublas_kernels",
         ":kernel_pybind11_helpers",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cublas_lib",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/strings:str_format",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cublas_lib",
         "@pybind11",
     ],
 )
@@ -294,12 +294,12 @@ cc_library(
         ":cuda_gpu_kernel_helpers",
         ":handle_pool",
         ":kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cusolver_lib",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/synchronization",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cusolver_lib",
     ],
 )
 
@@ -316,11 +316,11 @@ pybind_extension(
         ":cuda_gpu_kernel_helpers",
         ":cusolver_kernels",
         ":kernel_pybind11_helpers",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cusolver_lib",
         "@com_google_absl//absl/container:flat_hash_map",
         "@com_google_absl//absl/strings:str_format",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cusolver_lib",
         "@pybind11",
     ],
 )
@@ -333,13 +333,13 @@ cc_library(
         ":cuda_gpu_kernel_helpers",
         ":handle_pool",
         ":kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cusparse_lib",
         "@com_google_absl//absl/status",
         "@com_google_absl//absl/status:statusor",
         "@com_google_absl//absl/synchronization",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cusparse_lib",
     ],
 )
 
@@ -356,8 +356,6 @@ pybind_extension(
         ":cuda_gpu_kernel_helpers",
         ":cusparse_kernels",
         ":kernel_pybind11_helpers",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cusparse_lib",
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/base",
         "@com_google_absl//absl/base:core_headers",
@@ -368,6 +366,8 @@ pybind_extension(
         "@com_google_absl//absl/strings:str_format",
         "@com_google_absl//absl/synchronization",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cusparse_lib",
         "@pybind11",
     ],
 )
@@ -382,8 +382,8 @@ cc_library(
         ":cuda_gpu_kernel_helpers",
         ":cuda_lu_pivot_kernels_impl",
         ":kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
     ],
 )
 
@@ -396,8 +396,8 @@ cuda_library(
     deps = [
         ":cuda_gpu_kernel_helpers",
         ":kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
     ],
 )
 
@@ -415,8 +415,8 @@ pybind_extension(
         ":cuda_lu_pivot_kernels",
         ":cuda_lu_pivot_kernels_impl",
         ":kernel_pybind11_helpers",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
         "@pybind11",
     ],
 )
@@ -431,8 +431,8 @@ cc_library(
         ":cuda_gpu_kernel_helpers",
         ":cuda_prng_kernels_impl",
         ":kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
     ],
 )
 
@@ -445,8 +445,8 @@ cuda_library(
     deps = [
         ":cuda_gpu_kernel_helpers",
         ":kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
     ],
 )
 
@@ -463,8 +463,8 @@ pybind_extension(
         ":cuda_gpu_kernel_helpers",
         ":cuda_prng_kernels",
         ":kernel_pybind11_helpers",
-        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
         "@local_config_cuda//cuda:cuda_headers",
+        "@org_tensorflow//tensorflow/stream_executor/cuda:cudart_stub",
         "@pybind11",
     ],
 )
@@ -483,7 +483,6 @@ pybind_extension(
         ":handle_pool",
         ":kernel_pybind11_helpers",
         ":rocm_gpu_kernel_helpers",
-        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
         "@com_google_absl//absl/algorithm:container",
         "@com_google_absl//absl/base",
         "@com_google_absl//absl/base:core_headers",
@@ -496,6 +495,7 @@ pybind_extension(
         "@local_config_rocm//rocm:rocblas",
         "@local_config_rocm//rocm:rocm_headers",
         "@local_config_rocm//rocm:rocsolver",
+        "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_status",
         "@pybind11",
     ],
 )
