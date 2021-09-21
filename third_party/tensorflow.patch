@@ -1,0 +1,18 @@
+diff --git a/tensorflow/compiler/xla/python/BUILD b/tensorflow/compiler/xla/python/BUILD
+index e55ea3f56f4..3daea4a6161 100644
+--- a/tensorflow/compiler/xla/python/BUILD
++++ b/tensorflow/compiler/xla/python/BUILD
+@@ -525,6 +525,7 @@ pybind_extension(
+         "//third_party/py/numpy",
+     ],
+     pytype_srcs = glob(["xla_extension/*.pyi"]),
++    visibility = ["//visibility:public"],
+     deps = [
+         ":dlpack",
+         ":jax_jit",
+@@ -574,3 +575,5 @@ pybind_extension(
+         "//conditions:default": [],
+     }),
+ )
++
++exports_files(glob(["xla_extension/*.pyi"]))

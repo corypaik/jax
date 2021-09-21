@@ -21,6 +21,9 @@ load(
     "flatbuffer_py_library",
     "if_cuda_is_configured",
     "if_rocm_is_configured",
+    "patch_copy_tpu_client",
+    "patch_copy_xla_client",
+    "patch_jaxlib_pkg",
     "pybind_extension",
 )
 
@@ -111,12 +114,16 @@ cc_library(
     ],
 )
 
+patch_copy_xla_client(name = "xla_client")
+
+patch_copy_tpu_client(name = "tpu_client")
+
+patch_jaxlib_pkg(name = "_")
+
 py_library(
     name = "jaxlib",
     srcs = [
         "init.py",
-        "lapack.py",
-        "pocketfft.py",
         "version.py",
     ] + if_cuda_is_configured([
         "cuda_linalg.py",
@@ -126,7 +133,13 @@ py_library(
     ]) + if_rocm_is_configured([
         "rocsolver.py",
     ]),
-    deps = [":pocketfft_flatbuffers_py"],
+    deps = [
+        ":_",
+        ":cpu_feature_guard",
+        ":lapack",
+        ":pocketfft",
+        ":xla_client",
+    ],
 )
 
 exports_files([
@@ -159,7 +172,12 @@ cc_library(
 py_library(
     name = "lapack",
     srcs = ["lapack.py"],
-    deps = ["//third_party/py/numpy"],
+    deps = [
+        ":xla_client",
+        ":_lapack",
+        "@org_tensorflow//third_party/py/numpy",
+        # pip: numpy
+    ],
 )
 
 pybind_extension(
@@ -200,6 +218,18 @@ cc_library(
         ":pocketfft_flatbuffers_cc",
         "@flatbuffers//:runtime_cc",
         "@pocketfft",
+    ],
+)
+
+py_library(
+    name = "pocketfft",
+    srcs = ["pocketfft.py"],
+    deps = [
+        ":_pocketfft",
+        ":pocketfft_flatbuffers_py",
+        ":xla_client",
+        # pip: numpy
+        # pip: flatbuffers
     ],
 )
 
