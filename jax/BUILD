@@ -47,8 +47,8 @@ pytype_library(
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
         "@opt_einsum_archive//:opt_einsum",
-        # pip: scipy
-        # pip: numpy
+        "@pip_pypi__scipy//:pkg",
+        "@pip_pypi__numpy//:pkg",
     ] + if_not_windows([
         "//jaxlib:tpu_client",
     ]) + if_cuda([

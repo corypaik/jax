@@ -8,7 +8,6 @@
 # of a concern here.
 _JAX_TEST_ENV = {
     "XLA_PYTHON_CLIENT_PREALLOCATE": "false",
-    # 
     "JAX_ENABLE_X64": "True",
 }
 
@@ -16,9 +15,8 @@ _SIZES = {
     "lax_numpy_test": "large",
     "linalg_test": "large",
     "lax_scipy_test": "large",
-    "lax_control_flow_test": "large"
+    "lax_control_flow_test": "large",
 }
-
 
 _GENERATE_TESTS = {
     file.split(".py")[0]: file
@@ -33,9 +31,9 @@ _GENERATE_TESTS = {
 [
     py_test(
         name = name,
+        size = _SIZES.get(name, "medium"),
         srcs = [file],
         env = _JAX_TEST_ENV,
-        size = _SIZES.get(name, "medium"),
         deps = [
             "//jax",
             "@absl_py//absl/testing:absltest",
@@ -44,7 +42,6 @@ _GENERATE_TESTS = {
     )
     for name, file in _GENERATE_TESTS.items()
 ]
-
 
 py_test(
     name = "line_search_test",
