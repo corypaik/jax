@@ -24,6 +24,7 @@ _GENERATE_TESTS = {
         ["*.py"],
         exclude = [
             "jax_to_hlo_test.py",
+            "lax_vmap_test.py",
         ],
     )
 }
@@ -68,10 +69,23 @@ py_test(
     ],
 )
 
+py_test(
+    name = "lax_vmap_test",
+    srcs = ["lax_vmap_test.py"],
+    env = _JAX_TEST_ENV,
+    deps = [
+        "//jax",
+        ":lax_test",
+        "@absl_py//absl/testing:absltest",
+        "@absl_py//absl/testing:parameterized",
+    ],
+)
+
 test_suite(
     name = "tests",
     tests = [
         ":jax_to_hlo_test",
         ":line_search_test",
+        ":lax_vmap_test",
     ] + _GENERATE_TESTS.keys(),
 )
