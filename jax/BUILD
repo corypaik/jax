@@ -14,7 +14,8 @@
 
 # JAX is Autograd and XLA
 
-load("//jaxlib:jax.bzl", "pytype_library")
+load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:packaging.bzl", "py_package")
 load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
 load("@local_config_rocm//rocm:build_defs.bzl", "if_rocm")
 load("@org_tensorflow//tensorflow:tensorflow.bzl", "if_not_windows")
@@ -25,7 +26,7 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files(["LICENSE"])
 
-pytype_library(
+py_library(
     name = "jax",
     srcs = glob(
         [
@@ -40,13 +41,8 @@ pytype_library(
     srcs_version = "PY3",
     deps = [
         "//jaxlib",
-        # third_party
-        "@absl_py//absl:app",
-        "@absl_py//absl/flags",
-        "@absl_py//absl/logging",
-        "@absl_py//absl/testing:absltest",
-        "@absl_py//absl/testing:parameterized",
-        "@opt_einsum_archive//:opt_einsum",
+        "@pypi_absl_py//:pkg",
+        "@pypi_opt_einsum//:pkg",
         "@pypi_scipy//:pkg",
         "@pypi_numpy//:pkg",
     ] + if_not_windows([
@@ -56,4 +52,10 @@ pytype_library(
     ]) + if_rocm([
         "//jaxlib:rocblas_kernels",
     ]),
+)
+
+py_package(
+    name = "pkg",
+    packages = ["jax"],
+    deps = [":jax"],
 )
