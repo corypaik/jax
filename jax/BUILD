@@ -38,6 +38,7 @@ py_library(
         ],
     ),
     data = if_cuda(["@local_config_cuda//cuda:cuda-nvvm"]),
+    imports = [".."],
     srcs_version = "PY3",
     deps = [
         "//jaxlib",
@@ -45,6 +46,7 @@ py_library(
         "@pypi_opt_einsum//:pkg",
         "@pypi_scipy//:pkg",
         "@pypi_numpy//:pkg",
+        "@pypi_typing_extensions//:pkg",
     ] + if_not_windows([
         "//jaxlib:tpu_client",
     ]) + if_cuda([

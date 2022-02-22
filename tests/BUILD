@@ -3,6 +3,9 @@
 	dependencies, and then manually write a few misc. tests.
 """
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@rules_python//python:defs.bzl", "py_test")
+
 # Disable pre-allocation during tests, otherwise we'd have to run them all
 # sequentially. Most tests use little GPU memeory, so fragmentation isn't much
 # of a concern here.
@@ -16,14 +19,15 @@ _SIZES = {
     "linalg_test": "large",
     "lax_scipy_test": "large",
     "lax_control_flow_test": "large",
+    "sparse_test": "large",
 }
 
 _GENERATE_TESTS = {
-    file.split(".py")[0]: file
+    paths.split_extension(paths.basename(file))[0]: file
     for file in glob(
         ["*.py"],
         exclude = [
-            "jax_to_hlo_test.py",
+            "jax_to_ir_test.py",
             "lax_vmap_test.py",
         ],
     )
@@ -53,17 +57,16 @@ py_test(
         "//jax",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
-        # pip: scipy
     ],
 )
 
 py_test(
-    name = "jax_to_hlo_test",
-    srcs = ["jax_to_hlo_test.py"],
+    name = "jax_to_ir_test",
+    srcs = ["jax_to_ir_test.py"],
     env = _JAX_TEST_ENV,
     deps = [
         "//jax",
-        "//jax/tools:jax_to_hlo",
+        "//jax/tools:jax_to_ir",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
     ],
@@ -74,8 +77,8 @@ py_test(
     srcs = ["lax_vmap_test.py"],
     env = _JAX_TEST_ENV,
     deps = [
-        "//jax",
         ":lax_test",
+        "//jax",
         "@absl_py//absl/testing:absltest",
         "@absl_py//absl/testing:parameterized",
     ],
@@ -84,7 +87,7 @@ py_test(
 test_suite(
     name = "tests",
     tests = [
-        ":jax_to_hlo_test",
+        ":jax_to_ir_test",
         ":line_search_test",
         ":lax_vmap_test",
     ] + _GENERATE_TESTS.keys(),

@@ -121,11 +121,17 @@ py_library(
         "rocsolver.py",
     ]),
     data = ["py.typed"],
+    imports = [".."],
     deps = [
         ":cpu_feature_guard",
         ":lapack",
         ":pocketfft",
         ":xla_client",
+        "//jaxlib:pocketfft_flatbuffers_py",
+        "//jaxlib/mlir:builtin_dialect",
+        "//jaxlib/mlir:ir",
+        "//jaxlib/mlir:mhlo_dialect",
+        "//jaxlib/mlir:standard_dialect",
     ],
 )
 

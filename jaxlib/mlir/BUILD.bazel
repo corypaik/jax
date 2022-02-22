@@ -50,6 +50,10 @@ symlink_inputs(
 
 py_library(
     name = "mlir",
+    imports = [
+        "..",
+        "../..",
+    ],
     deps = [
         "//jaxlib/mlir/_mlir_libs:_mlir",
     ],

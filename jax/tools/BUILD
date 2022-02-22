@@ -31,6 +31,7 @@ py_library(
 py_library(
     name = "jax_to_ir_with_tensorflow",
     srcs = ["jax_to_ir.py"],
+    tags = ["manual"],
     deps = [
         "//jax",
         "@org_tensorflow//tensorflow:tensorflow_py",
