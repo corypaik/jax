@@ -22,6 +22,8 @@ load(
     "if_rocm_is_configured",
     "pybind_extension",
 )
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@org_tensorflow//third_party:common.bzl", "template_rule")
 
 licenses(["notice"])
 
@@ -113,14 +115,18 @@ cc_library(
 py_library(
     name = "jaxlib",
     srcs = [
-        "init.py",
-        "lapack.py",
-        "pocketfft.py",
+        "__init__.py",
         "version.py",
     ] + if_rocm_is_configured([
         "rocsolver.py",
     ]),
-    deps = [":pocketfft_flatbuffers_py"],
+    data = ["py.typed"],
+    deps = [
+        ":cpu_feature_guard",
+        ":lapack",
+        ":pocketfft",
+        ":xla_client",
+    ],
 )
 
 exports_files([
@@ -160,7 +166,12 @@ cc_library(
 py_library(
     name = "lapack",
     srcs = ["lapack.py"],
-    deps = ["//third_party/py/numpy"],
+    deps = [
+        ":_lapack",
+        ":xla_client",
+        "@org_tensorflow//third_party/py/numpy",
+        "@pypi_numpy//:pkg",
+    ],
 )
 
 pybind_extension(
@@ -201,6 +212,18 @@ cc_library(
         ":pocketfft_flatbuffers_cc",
         "@flatbuffers//:runtime_cc",
         "@pocketfft",
+    ],
+)
+
+py_library(
+    name = "pocketfft",
+    srcs = ["pocketfft.py"],
+    deps = [
+        ":_pocketfft",
+        ":pocketfft_flatbuffers_py",
+        ":xla_client",
+        "@pypi_flatbuffers//:pkg",
+        "@pypi_numpy//:pkg",
     ],
 )
 
@@ -520,4 +543,80 @@ cc_library(
         "@org_tensorflow//tensorflow/compiler/xla/service:custom_call_target_registry",
     ],
     alwayslink = 1,
+)
+
+# ==============================================================================
+# Copy xla extension from tpu client from @org_tensorflow
+
+_XLA_EXTENSION_STUBS = [
+    "__init__.pyi",
+    "jax_jit.pyi",
+    "ops.pyi",
+    "outfeed_receiver.pyi",
+    "pmap_lib.pyi",
+    "profiler.pyi",
+    "pytree.pyi",
+]
+
+py_library(
+    name = "xla_client",
+    srcs = ["xla_client.py"],
+    data = _XLA_EXTENSION_STUBS + select({
+        "@org_tensorflow//tensorflow:windows": ["xla_extension.pyd"],
+        "//conditions:default": ["xla_extension.so"],
+    }),
+)
+
+copy_file(
+    name = "xla_client_py",
+    src = "@org_tensorflow//tensorflow/compiler/xla/python:xla_client",
+    out = "xla_client.py",
+)
+
+copy_file(
+    name = "xla_extension_so",
+    src = "@org_tensorflow//tensorflow/compiler/xla/python:xla_extension.so",
+    out = "xla_extension.so",
+)
+
+copy_file(
+    name = "xla_extension_pyd",
+    src = "@org_tensorflow//tensorflow/compiler/xla/python:xla_extension.pyd",
+    out = "xla_extension.pyd",
+)
+
+# Copy type stubs
+[
+    template_rule(
+        name = "%s_stub" % stub_name,
+        src = "@org_tensorflow//tensorflow/compiler/xla/python:xla_extension/%s" % stub_name,
+        out = stub_name,
+        substitutions = {
+            "from tensorflow.compiler.xla.python import xla_extension": "from jaxlib import xla_extension",
+        },
+    )
+    for stub_name in _XLA_EXTENSION_STUBS
+]
+
+copy_file(
+    name = "tpu_client_extension_so",
+    src = "@org_tensorflow//tensorflow/compiler/xla/python/tpu_driver/client:tpu_client_extension.so",
+    out = "tpu_client_extension.so",
+)
+
+template_rule(
+    name = "py_tpu_client_py",
+    src = "@org_tensorflow//tensorflow/compiler/xla/python/tpu_driver/client:py_tpu_client",
+    out = "tpu_client.py",
+    substitutions = {
+        "from tensorflow.compiler.xla.python import xla_extension as _xla": "from jaxlib import xla_extension as _xla",
+        "from tensorflow.compiler.xla.python import xla_client": "from jaxlib import xla_client",
+        "from tensorflow.compiler.xla.python.tpu_driver.client import tpu_client_extension as _tpu_client": "from jaxlib import tpu_client_extension as _tpu_client",
+    },
+)
+
+py_library(
+    name = "tpu_client",
+    srcs = ["tpu_client.py"],
+    data = [":tpu_client_extension.so"],
 )
