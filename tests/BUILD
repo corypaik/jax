@@ -91,4 +91,5 @@ test_suite(
         ":line_search_test",
         ":lax_vmap_test",
     ] + _GENERATE_TESTS.keys(),
+    visibility = ["//visibility:public"],
 )
