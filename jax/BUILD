@@ -42,11 +42,11 @@ py_library(
     srcs_version = "PY3",
     deps = [
         "//jaxlib",
-        "@pypi_absl_py//:pkg",
-        "@pypi_opt_einsum//:pkg",
-        "@pypi_scipy//:pkg",
-        "@pypi_numpy//:pkg",
-        "@pypi_typing_extensions//:pkg",
+        "@pip//absl_py",
+        "@pip//opt_einsum",
+        "@pip//scipy",
+        "@pip//numpy",
+        "@pip//typing_extensions",
     ] + if_not_windows([
         "//jaxlib:tpu_client",
     ]) + if_cuda([

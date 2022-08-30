@@ -176,7 +176,7 @@ py_library(
         ":_lapack",
         ":xla_client",
         "@org_tensorflow//third_party/py/numpy",
-        "@pypi_numpy//:pkg",
+        "@pip//numpy",
     ],
 )
 
@@ -228,8 +228,8 @@ py_library(
         ":_pocketfft",
         ":pocketfft_flatbuffers_py",
         ":xla_client",
-        "@pypi_flatbuffers//:pkg",
-        "@pypi_numpy//:pkg",
+        "@pip//flatbuffers",
+        "@pip//numpy",
     ],
 )
 
